@@ -1,0 +1,22 @@
+databases:
+  - name: otoo_DB
+    databaseName: otoo_db
+    user: otoo
+    region: singapore
+
+services:
+  - type: web
+    name: otoo
+    env: ruby
+    region: singapore
+    plan: free
+    buildCommand: "./bin/render-build.sh"
+    startCommand: "bundle exec puma -C config/puma.rb"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: otoo_DB
+          property: connectionString
+      - key: RAILS_MASTER_KEY
+        sync: false
+
