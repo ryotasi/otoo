@@ -1,0 +1,54 @@
+<h1>Otoo</h1>
+<h3>Detail</h3>
+<div class="asa">
+<div class="asa">
+        <%= link_to @asa.user.name, user_path(@asa.user.id) %>
+        <%= @asa.user.email %>
+        <%= @asa.odai %>
+        <%= image_tag @asa.image_url, size: "250x200" if @asa.image? %>
+        <% if user_signed_in? %>
+            <% if current_user.already_liked?(@asa) %>
+                <%= button_to asa_like_path(id: @asa.id, asa_id: @asa.id), method: :delete do %>
+                    <i class="fas fa-heart"></i><%= @asa.likes.count %>
+                <% end %>
+            <% else %>
+                <%= button_to asa_likes_path(id: @asa.id, asa_id: @asa.id) ,method: :post do %>
+                    <i class="fas fa-heart"></i><%= @asa.likes.count %>
+                <% end %>
+            <% end %>
+        <% else %>
+            <i class="far fa-heart"></i><%= @asa.likes.count %>
+        <% end %>
+    </div> 
+
+    <h2>いいねした人</h2>
+    <% @asa.liked_users.each do |user| %>
+    <%= link_to user.name, user_path(user.id) %>  
+    <% end %>
+    <div class="comment-wrapper">
+    <h2>コメント</h2>
+    <% @comments.each do |c| %>
+        <div>
+        <div class="username">
+            <% if user_signed_in? %>
+                <%= link_to c.user.name, user_path(c.user.id) %>  
+            <% else %>
+                <%= link_to c.user.name, new_user_session_path %>
+            <% end %>
+        </div>
+            <br>
+            <%= c.content %>
+        </div>
+            <br>
+    <% end %>
+    
+    <% if user_signed_in? %>
+        <%= form_with(model: [@asa, @comment], local: true) do |f| %>
+            <%= f.text_area :content %>
+            <%= button_tag type: "submit" do %>
+                <i class="far fa-comments"></i> Comment
+            <% end %>
+        <% end %>
+    <% end %>
+</div>
+<%= link_to "Back", asas_path %>

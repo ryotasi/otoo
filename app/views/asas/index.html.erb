@@ -1,0 +1,59 @@
+<h1>検索する</h1>
+<%= form_tag({controller:"asas",action:"index"}, method: :get) do %>
+  <%= text_field_tag :search %>
+  <%= submit_tag '検索'  %>
+<% end %>
+<%= link_to "投稿する", new_asa_path %>
+<% if user_signed_in? %>
+  <%= link_to "マイページ", user_path(current_user.id) %>
+<% end %>
+<%= link_to "動物", asas_animal_path %>
+<%= link_to "ファッション", asas_style_path %>
+<%= link_to "美容", asas_beauty_path %>
+<%= link_to "ミーム", asas_meme_path %>
+<%= link_to "音楽", asas_music_path %>
+<%= link_to "旅行", asas_trip_path %>
+<%= link_to "食べ物", asas_food_path %>
+<%= link_to "アニメ", asas_anime_path %>
+<%= link_to "映画", asas_movie_path %>
+<%= link_to "スポーツ", asas_sport_path %>
+<%= link_to "漫画", asas_manga_path %>
+<%= link_to "勉強", asas_study_path %>
+<%= link_to "ビジネス", asas_business_path %>
+<%= link_to "テレビ番組・ドラマ", asas_tvshow_path %>
+<%= link_to "芸能人", asas_celebrity_path %>
+<%= link_to "イベント・お祭り", asas_event_path %>
+<%= link_to "ゲーム", asas_game_path %>
+<%= link_to "その他", asas_others_path %>
+<div class="asas-container">
+  <% @asas.each do |t| %>
+    <div class="asa">
+        <%= link_to t.user.name, user_path(t.user.id) %>
+        <%= t.user.email %>
+        <%= t.odai %>
+        <% if t.category = "動物" %>
+          <% link_to t.category, asas_animal_path %>
+        <% end %>
+        <%= link_to asa_path(t.id) do %>
+          <%= image_tag t.image_url, size: "400x300" if t.image? %>
+        <% end %>
+      <% if user_signed_in? %>
+          <% if current_user.already_liked?(t) %>
+              <%= button_to asa_like_path(id: t.id, asa_id: t.id), method: :delete do %>
+                <i class="fas fa-heart"></i><%= t.likes.count %>
+              <% end %>
+          <% else %>
+              <%= button_to asa_likes_path(id: t.id, asa_id: t.id) ,method: :post do %>
+                <i class="fas fa-heart"></i><%= t.likes.count %>
+              <% end %>
+          <% end %>
+      <% else %>
+          <i class="far fa-heart"></i><%= t.likes.count %>
+      <% end %>
+      <% if user_signed_in? %>
+        <%= button_to "削除", asa_path(t.id), method: :delete %>
+      <% end %>
+    </div> 
+  <% end %>
+</div>
+<%= link_to "Back", asas_path %> 

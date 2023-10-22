@@ -1,0 +1,20 @@
+<h1>ユーザーページ</h1>
+<p>名前 : <%= @user.name %></p>
+<p>E-mail : <%= @user.email %></p>
+<p>プロフィール : <%= @user.profile %></p>
+<%= image_tag @user.image_url, size: "250x200" if @user.image? %>
+<% if current_user.id == @user.id %>
+    <%= link_to "Edit", edit_user_registration_path %>
+<% end %>
+
+<h2>投稿</h2>
+<% @user.asas.each do |t| %>
+    <%= t.user.name %>
+<% end %>
+
+<h2>いいねした投稿</h2>
+<% @user.liked_asas.each do |t| %>
+    <%= t.user.name %>
+<% end %>
+
+<%= link_to "Back", asas_path %>

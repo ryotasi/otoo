@@ -1,0 +1,31 @@
+<h1>美容</h1>
+<%= link_to "New Post", new_asa_path %>
+<% if user_signed_in? %>
+    <%= link_to "My Page", user_path(current_user.id) %>
+<% end %>
+<div class="asas-container">
+    <% @asas.each do |t| %>
+        <div class="asa">
+            <%= link_to t.user.name, user_path(t.user.id) %>
+            <%= t.user.email %>
+            <%= t.odai %>
+            <%= link_to asa_path(t.id) do %>
+                <%= image_tag t.image_url, size: "250x200" if t.image? %>
+            <% end %>
+            <% if user_signed_in? %>
+                <% if current_user.already_liked?(t) %>
+                    <%= button_to asa_like_path(id: t.id, asa_id: t.id), method: :delete do %>
+                    <i class="fas fa-heart"></i><%= t.likes.count %>
+                    <% end %>
+                <% else %>
+                    <%= button_to asa_likes_path(id: t.id, asa_id: t.id) ,method: :post do %>
+                    <i class="fas fa-heart"></i><%= t.likes.count %>
+                    <% end %>
+                <% end %>
+            <% else %>
+                <i class="far fa-heart"></i><%= t.likes.count %>
+            <% end %>
+        </div> 
+    <% end %>
+</div>
+<%= link_to "Back", asas_path %> 
